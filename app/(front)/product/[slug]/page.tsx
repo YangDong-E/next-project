@@ -1,0 +1,80 @@
+import data from '@/lib/data'
+import Image from 'next/image'
+import Link from 'next/link'
+
+export default function ProductDetails({
+    params,
+}: {
+    params: { slug: string }
+}) {
+    // data 파일에서 products안에서 find로 products.slug와 params.slug가 맞는 것을 찾는다.
+    const product = data.products.find((x) => x.slug === params.slug)
+    if (!product) {
+        return <div>제품이 없습니다.</div>
+    }
+    return (
+        <>
+            <div className="my-2">
+                <Link href="/"> 메인으로</Link>
+            </div>
+            <div className="grid md:grid-cols-4 md:gab-3">
+                <div className="md:col-span-2">
+                    <Image
+                        src={product.image}
+                        alt={product.name}
+                        width={640}
+                        height={640}
+                        sizes="100vw"
+                        style={{
+                            width: '100%',
+                            height: 'auto',
+                        }}
+                    />
+                </div>
+                <div>
+                    <ul className="space-y-4">
+                        <li>
+                            <h1 className="text-xl">{product.name}</h1>
+                        </li>
+                        <li>
+                            {product.numReviews}개 중 {product.rating}
+                        </li>
+                        <li>{product.brand}</li>
+                        <li>
+                            <div className="divider"></div>
+                        </li>
+                        <li>
+                            상세 내용: <p>{product.description}</p>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <div className="card bg-base-300 shadow-xl mt-3 md:mt-0">
+                        <div className="card-body">
+                            <div className="mb-2 flex justify-between">
+                                <div>가격</div>
+                                <div>{product.price} 원</div>
+                            </div>
+                            <div className="mb-2 flex justify-between">
+                                <div>재고상태</div>
+                                <div>
+                                    {product.countInStock > 0
+                                        ? '재고 있음'
+                                        : '재고 없음'}
+                                </div>
+                            </div>
+                            <div className="card-actions justify-center">
+                                <button
+                                    className="btn btn-primary w-full"
+                                    type="button"
+                                >
+                                    장바구니 담기
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </>
+    )
+}
