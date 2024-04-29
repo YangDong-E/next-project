@@ -61,7 +61,7 @@ const data = {
             brand: 'Zara',
             rating: 3.5,
             numReviews: 7,
-            countInStock: 20,
+            countInStock: 17,
             description: 'A popular pants',
         },
         {
@@ -73,7 +73,7 @@ const data = {
             brand: 'Casely',
             rating: 2.4,
             numReviews: 14,
-            countInStock: 20,
+            countInStock: 15,
             description: 'A popular pants',
         },
     ],
