@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { round2 } from '../utils'
 import { OrderItem } from '../models/OrderModel'
+import { persist } from 'zustand/middleware'
 
 type Cart = {
     items: OrderItem[]
@@ -23,7 +24,13 @@ const initialState: Cart = {
     totalPrice: 0,
 }
 
-export const cartStore = create<Cart>(() => initialState)
+// Zustand의 persist 미들웨어를 사용하여 상태를 LocalStorage와 같은 저장소에 저장하여 데이터를 유지할 수 있도록 해준다.
+// 전역 상태 관리 라이브러리들은 상태를 메모리에 유지하는데 페이지가 새로고침되면 환경이 초기화디어 데이터가 사라지는 것을 방지
+export const cartStore = create<Cart>()(
+    persist(() => initialState, {
+        name: 'cartStore',
+    })
+)
 
 export default function useCartService() {
     const { items, itemsPrice, taxPrice, shippingPrice, totalPrice } =
@@ -66,7 +73,9 @@ export default function useCartService() {
                 exist.qty === 1
                     ? items.filter((x: OrderItem) => x.slug !== item.slug)
                     : items.map((x) =>
-                          item.slug ? { ...exist, qty: exist.qty - 1 } : x
+                          x.slug === item.slug
+                              ? { ...exist, qty: exist.qty - 1 }
+                              : x
                       )
             const { itemsPrice, shippingPrice, taxPrice, totalPrice } =
                 calcPrice(updatedCartItems)
