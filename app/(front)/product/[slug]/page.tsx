@@ -1,15 +1,32 @@
 import AddToCart from '@/components/products/AddToCart'
+import { convertDocToObj } from '@/lib/utils'
 import data from '@/lib/data'
+import productService from '@/lib/services/productService'
 import Image from 'next/image'
 import Link from 'next/link'
 
-export default function ProductDetails({
+export async function generateMetadata({
+    params,
+}: {
+    params: { slug: string }
+}) {
+    const product = await productService.getBySlug(params.slug)
+    if (!product) {
+        return { title: 'Product not found' }
+    }
+    return {
+        title: product.name,
+        description: product.description,
+    }
+}
+
+export default async function ProductDetails({
     params,
 }: {
     params: { slug: string }
 }) {
     // data 파일에서 products안에서 find로 products.slug와 params.slug가 맞는 것을 찾는다.
-    const product = data.products.find((x) => x.slug === params.slug)
+    const product = await productService.getBySlug(params.slug)
     if (!product) {
         return <div>제품이 없습니다.</div>
     }
@@ -68,7 +85,7 @@ export default function ProductDetails({
                                 <div className="card-actions justify-center">
                                     <AddToCart
                                         item={{
-                                            ...product,
+                                            ...convertDocToObj(product),
                                             qty: 0,
                                             color: '',
                                             size: '',
