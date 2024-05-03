@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { round2 } from '../utils'
-import { OrderItem } from '../models/OrderModel'
+import { OrderItem, ShippingAddress } from '../models/OrderModel'
 import { persist } from 'zustand/middleware'
 
 type Cart = {
@@ -13,6 +13,10 @@ type Cart = {
     shippingPrice: number
     // 총 가격
     totalPrice: number
+    // 결제 수단
+    paymentMethod: string
+    // 배송지
+    shippingAddress: ShippingAddress
 }
 
 // 초기값
@@ -22,6 +26,15 @@ const initialState: Cart = {
     taxPrice: 0,
     shippingPrice: 0,
     totalPrice: 0,
+    // 기본 결제 수단
+    paymentMethod: 'PayPal',
+    shippingAddress: {
+        fullName: '',
+        address: '',
+        city: '',
+        postalCode: '',
+        country: '',
+    },
 }
 
 // Zustand의 persist 미들웨어를 사용하여 상태를 LocalStorage와 같은 저장소에 저장하여 데이터를 유지할 수 있도록 해준다.
@@ -33,14 +46,23 @@ export const cartStore = create<Cart>()(
 )
 
 export default function useCartService() {
-    const { items, itemsPrice, taxPrice, shippingPrice, totalPrice } =
-        cartStore()
+    const {
+        items,
+        itemsPrice,
+        taxPrice,
+        shippingPrice,
+        totalPrice,
+        paymentMethod,
+        shippingAddress,
+    } = cartStore()
     return {
         items,
         itemsPrice,
         taxPrice,
         shippingPrice,
         totalPrice,
+        paymentMethod,
+        shippingAddress,
         increase: (item: OrderItem) => {
             const exist = items.find((x) => x.slug === item.slug)
             const updatedCartItems = exist
@@ -85,6 +107,21 @@ export default function useCartService() {
                 shippingPrice,
                 taxPrice,
                 totalPrice,
+            })
+        },
+        saveShippingAddrress: (shippingAddress: ShippingAddress) => {
+            cartStore.setState({
+                shippingAddress,
+            })
+        },
+        savePaymentMethod: (paymentMethod: string) => {
+            cartStore.setState({
+                paymentMethod,
+            })
+        },
+        clear: () => {
+            cartStore.setState({
+                items: [],
             })
         },
     }
