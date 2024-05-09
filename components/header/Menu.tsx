@@ -66,6 +66,9 @@ const Menu = () => {
                                         </Link>
                                     </li>
                                     <li>
+                                        <Link href="/profile">프로필</Link>
+                                    </li>
+                                    <li>
                                         <button
                                             type="button"
                                             onClick={signoutHandler}
