@@ -55,7 +55,7 @@ const Form = () => {
             })
             if (res.ok) {
                 return router.push(
-                    `/signin?callbackUrl=${callbackUrl}&success=Account has been created`
+                    `/signin?callbackUrl=${callbackUrl}&success=회원가입이 완료되었습니다.`
                 )
             } else {
                 const data = await res.json()
@@ -76,7 +76,7 @@ const Form = () => {
                 <form onSubmit={handleSubmit(formSubmit)}>
                     <div className="my-2">
                         <label className="label" htmlFor="name">
-                            Name
+                            이름
                         </label>
                         <input
                             type="text"
