@@ -16,5 +16,28 @@ const config: Config = {
         },
     },
     plugins: [require('daisyui')],
+    daisyui: {
+        themes: [
+            {
+                light: {
+                    ...require('daisyui/src/theming/themes')['light'],
+                    primary: '#fbbf24',
+                    '.toaster-con': {
+                        'background-color': 'white',
+                        color: 'black',
+                    },
+                },
+                dark: {
+                    ...require('daisyui/src/theming/themes')['dark'],
+                    primary: '#fbbf24',
+                    '.toaster-con': {
+                        'background-color': 'black',
+                        color: 'white',
+                    },
+                },
+            },
+        ],
+    },
+    darkMode: ['class', '["dark"]'],
 }
 export default config
