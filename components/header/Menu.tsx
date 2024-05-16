@@ -22,6 +22,10 @@ const Menu = () => {
 
     const { theme, toggleTheme } = useLayoutService()
 
+    const handleClick = () => {
+        ;(document.activeElement as HTMLElement).blur()
+    }
+
     return (
         <div>
             <ul className="flex items-stretch">
@@ -95,6 +99,13 @@ const Menu = () => {
                                     tabIndex={0}
                                     className="menu dropdown-content z-[1] p-2 shadow bg-base-300 rounded-box w-52 "
                                 >
+                                    {session.user.isAdmin && (
+                                        <li onClick={handleClick}>
+                                            <Link href="/admin/dashboard">
+                                                관리자 대시보드
+                                            </Link>
+                                        </li>
+                                    )}
                                     <li>
                                         <Link href="/order-history">
                                             주문내역
