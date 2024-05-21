@@ -19,7 +19,7 @@ export const PUT = auth(async (...request: any) => {
         if (order) {
             if (!order.isPaid)
                 return Response.json(
-                    { message: 'Order is not paid' },
+                    { message: '결제가 되지 않았습니다.' },
                     {
                         status: 400,
                     }
@@ -30,7 +30,7 @@ export const PUT = auth(async (...request: any) => {
             return Response.json(updatedOrder)
         } else {
             return Response.json(
-                { message: 'Order not found' },
+                { message: '주문정보가 없습니다.' },
                 {
                     status: 404,
                 }

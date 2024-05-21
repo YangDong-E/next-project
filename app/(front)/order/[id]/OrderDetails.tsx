@@ -27,7 +27,7 @@ export default function OrderDetails({
             })
             const data = await res.json()
             res.ok
-                ? toast.success('Order delivered successfully')
+                ? toast.success('주문이 성공적으로 배달되었습니다.')
                 : toast.error(data.message)
         }
     )
@@ -54,7 +54,7 @@ export default function OrderDetails({
         })
             .then((response) => response.json())
             .then((orderData) => {
-                toast.success('Order paid successfully')
+                toast.success('결제가 되었습니다.')
             })
     }
 
