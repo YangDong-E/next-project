@@ -129,6 +129,7 @@ export default function OrderDetails({
                                         <th>상품</th>
                                         <th>개수</th>
                                         <th>가격</th>
+                                        <th>개개수</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -154,6 +155,7 @@ export default function OrderDetails({
                                             </td>
                                             <td>{item.qty}개</td>
                                             <td>{item.price}원</td>
+                                            <td>{item.countInStock}개</td>
                                         </tr>
                                     ))}
                                 </tbody>
