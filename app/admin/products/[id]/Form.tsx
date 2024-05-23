@@ -88,6 +88,41 @@ export default function ProductEditForm({ productId }: { productId: string }) {
         </div>
     )
 
+    const uploadHandler = async (e: any) => {
+        const toastId = toast.loading('사진 업로드중...')
+        try {
+            const resSign = await fetch('/api/cloudinary-sign', {
+                method: 'POST',
+            })
+            const { signature, timestamp } = await resSign.json()
+            const file = e.target.files[0]
+            const formData = new FormData()
+            formData.append('file', file)
+            formData.append('signature', signature)
+            formData.append('timestamp', timestamp)
+            formData.append(
+                'api_key',
+                process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY!
+            )
+            const res = await fetch(
+                `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/upload`,
+                {
+                    method: 'POST',
+                    body: formData,
+                }
+            )
+            const data = await res.json()
+            setValue('image', data.secure_url)
+            toast.success('사진이 등록되었습니다.', {
+                id: toastId,
+            })
+        } catch (err: any) {
+            toast.error(err.message, {
+                id: toastId,
+            })
+        }
+    }
+
     return (
         <div>
             <h1 className="text-2xl py-4">상품 정보 수정 ({data.name})</h1>
@@ -96,6 +131,19 @@ export default function ProductEditForm({ productId }: { productId: string }) {
                     <FormInput name="이름" id="name" required />
                     <FormInput name="검색단어" id="slug" required />
                     <FormInput name="이미지" id="image" required />
+                    <div className="md:flex mb-6">
+                        <label className="label md:w-1/5" htmlFor="imageFile">
+                            사진 등록
+                        </label>
+                        <div className="md:w-4/5">
+                            <input
+                                type="file"
+                                className="file-input w-full max-w-md"
+                                id="imageFile"
+                                onChange={uploadHandler}
+                            />
+                        </div>
+                    </div>
                     <FormInput name="가격" id="price" required />
                     <FormInput name="카테고리" id="category" required />
                     <FormInput name="브랜드" id="brand" required />
