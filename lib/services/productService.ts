@@ -34,13 +34,13 @@ const getByQuery = cache(
         category,
         sort,
         price,
-        rating,
+        // rating,
         page = '1',
     }: {
         q: string
         category: string
         price: string
-        rating: string
+        // rating: string
         sort: string
         page: string
     }) => {
@@ -57,14 +57,14 @@ const getByQuery = cache(
                 : {}
         const categoryFilter =
             category && category !== 'all' ? { category } : {}
-        const ratingFilter =
-            rating && rating !== 'all'
-                ? {
-                      rating: {
-                          $gte: Number(rating),
-                      },
-                  }
-                : {}
+        // const ratingFilter =
+        //     rating && rating !== 'all'
+        //         ? {
+        //               rating: {
+        //                   $gte: Number(rating),
+        //               },
+        //           }
+        //         : {}
         // 10-50
         const priceFilter =
             price && price !== 'all'
@@ -90,7 +90,7 @@ const getByQuery = cache(
                 ...queryFilter,
                 ...categoryFilter,
                 ...priceFilter,
-                ...ratingFilter,
+                // ...ratingFilter,
             },
             '-reviews'
         )
@@ -103,7 +103,7 @@ const getByQuery = cache(
             ...queryFilter,
             ...categoryFilter,
             ...priceFilter,
-            ...ratingFilter,
+            // ...ratingFilter,
         })
 
         return {

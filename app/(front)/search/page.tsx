@@ -1,55 +1,40 @@
 import ProductItem from '@/components/products/ProductItem'
-import { Rating } from '@/components/products/Rating'
 import productServices from '@/lib/services/productService'
 import Link from 'next/link'
 import React from 'react'
 
-const sortOrders = ['newest', 'lowest', 'highest', 'rating']
+const sortOrders = ['최신순', '가격이 낮은순', '가격이 높은순']
 const prices = [
     {
-        name: '$1 to $50',
+        name: '1원 ~ 50원',
         value: '1-50',
     },
     {
-        name: '$51 to $200',
+        name: '51원 ~ 200원',
         value: '51-200',
     },
     {
-        name: '$201 to $1000',
+        name: '201원 ~ 1000원',
         value: '201-1000',
     },
 ]
-
-const ratings = [5, 4, 3, 2, 1]
-
 export async function generateMetadata({
-    searchParams: {
-        q = 'all',
-        category = 'all',
-        price = 'all',
-        rating = 'all',
-    },
+    searchParams: { q = 'all', category = 'all', price = 'all' },
 }: {
     searchParams: {
         q: string
         category: string
         price: string
-        rating: string
         sort: string
         page: string
     }
 }) {
-    if (
-        (q !== 'all' && q !== '') ||
-        category !== 'all' ||
-        rating !== 'all' ||
-        price !== 'all'
-    ) {
+    if ((q !== 'all' && q !== '') || category !== 'all' || price !== 'all') {
         return {
             title: `Search ${q !== 'all' ? q : ''}
           ${category !== 'all' ? ` : Category ${category}` : ''}
           ${price !== 'all' ? ` : Price ${price}` : ''}
-          ${rating !== 'all' ? ` : Rating ${rating}` : ''}`,
+          `,
         }
     } else {
         return {
@@ -63,7 +48,6 @@ export default async function SearchPage({
         q = 'all',
         category = 'all',
         price = 'all',
-        rating = 'all',
         sort = 'newest',
         page = '1',
     },
@@ -72,7 +56,6 @@ export default async function SearchPage({
         q: string
         category: string
         price: string
-        rating: string
         sort: string
         page: string
     }
@@ -81,19 +64,16 @@ export default async function SearchPage({
         c,
         s,
         p,
-        r,
         pg,
     }: {
         c?: string
         s?: string
         p?: string
-        r?: string
         pg?: string
     }) => {
-        const params = { q, category, price, rating, sort, page }
+        const params = { q, category, price, sort, page }
         if (c) params.category = c
         if (p) params.price = p
-        if (r) params.rating = r
         if (pg) params.page = pg
         if (s) params.sort = s
         return `/search?${new URLSearchParams(params).toString()}`
@@ -104,7 +84,6 @@ export default async function SearchPage({
             category,
             q,
             price,
-            rating,
             page,
             sort,
         }
@@ -112,7 +91,7 @@ export default async function SearchPage({
     return (
         <div className="grid md:grid-cols-5 md:gap-5">
             <div>
-                <div className="text-xl pt-3">Department</div>
+                <div className="text-xl pt-3">카테고리</div>
                 <div>
                     <ul>
                         <li>
@@ -122,7 +101,7 @@ export default async function SearchPage({
                                 }`}
                                 href={getFilterUrl({ c: 'all' })}
                             >
-                                Any
+                                모두
                             </Link>
                         </li>
                         {categories.map((c: string) => (
@@ -140,7 +119,7 @@ export default async function SearchPage({
                     </ul>
                 </div>
                 <div>
-                    <div className="text-xl pt-3">Price</div>
+                    <div className="text-xl pt-3">가격대</div>
                     <ul>
                         <li>
                             <Link
@@ -149,7 +128,7 @@ export default async function SearchPage({
                                 }`}
                                 href={getFilterUrl({ p: 'all' })}
                             >
-                                Any
+                                모두
                             </Link>
                         </li>
                         {prices.map((p) => (
@@ -166,60 +145,36 @@ export default async function SearchPage({
                         ))}
                     </ul>
                 </div>
-                <div>
-                    <div className="text-xl pt-3">Customer Review</div>
-                    <ul>
-                        <li>
-                            <Link
-                                href={getFilterUrl({ r: 'all' })}
-                                className={`link link-hover ${
-                                    'all' === rating && 'link-primary'
-                                }`}
-                            >
-                                Any
-                            </Link>
-                        </li>
-                        {ratings.map((r) => (
-                            <li key={r}>
-                                <Link
-                                    href={getFilterUrl({ r: `${r}` })}
-                                    className={`link link-hover ${
-                                        `${r}` === rating && 'link-primary'
-                                    }`}
-                                >
-                                    <Rating
-                                        caption={' & up'}
-                                        value={r}
-                                    ></Rating>
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
             </div>
             <div className="md:col-span-4">
                 <div className="flex items-center justify-between  py-4">
                     <div className="flex items-center">
-                        {products.length === 0 ? 'No' : countProducts} Results
+                        {products.length === 0 ? '없음' : countProducts}개
                         {q !== 'all' && q !== '' && ' : ' + q}
                         {category !== 'all' && ' : ' + category}
                         {price !== 'all' && ' : Price ' + price}
-                        {rating !== 'all' && ' : Rating ' + rating + ' & up'}
                         &nbsp;
                         {(q !== 'all' && q !== '') ||
                         category !== 'all' ||
-                        rating !== 'all' ||
                         price !== 'all' ? (
                             <Link
                                 className="btn btn-sm btn-ghost"
                                 href="/search"
                             >
-                                Clear
+                                초기화
                             </Link>
                         ) : null}
                     </div>
                     <div>
-                        Sort by{' '}
+                        <span
+                            style={{
+                                borderRight:
+                                    'solid 1px var(--fallback-bc,oklch(var(--bc)/0.5)',
+                                paddingRight: '10px',
+                            }}
+                        >
+                            분류
+                        </span>
                         {sortOrders.map((s) => (
                             <Link
                                 key={s}

@@ -90,7 +90,6 @@ export default function Products() {
                                 <td>{product.price}원</td>
                                 <td>{product.category}</td>
                                 <td>{product.countInStock}</td>
-                                <td>{product.rating}</td>
                                 <td>
                                     <Link
                                         href={`/admin/products/${product._id}`}

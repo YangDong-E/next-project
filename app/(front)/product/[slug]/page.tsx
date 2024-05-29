@@ -54,9 +54,6 @@ export default async function ProductDetails({
                         <li>
                             <h1 className="text-xl">{product.name}</h1>
                         </li>
-                        <li>
-                            {product.numReviews}개 중 {product.rating}
-                        </li>
                         <li>{product.brand}</li>
                         <li>
                             <div className="divider"></div>
