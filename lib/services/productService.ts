@@ -34,13 +34,11 @@ const getByQuery = cache(
         category,
         sort,
         price,
-        // rating,
         page = '1',
     }: {
         q: string
         category: string
         price: string
-        // rating: string
         sort: string
         page: string
     }) => {
@@ -57,14 +55,6 @@ const getByQuery = cache(
                 : {}
         const categoryFilter =
             category && category !== 'all' ? { category } : {}
-        // const ratingFilter =
-        //     rating && rating !== 'all'
-        //         ? {
-        //               rating: {
-        //                   $gte: Number(rating),
-        //               },
-        //           }
-        //         : {}
         // 10-50
         const priceFilter =
             price && price !== 'all'
@@ -80,8 +70,6 @@ const getByQuery = cache(
                 ? { price: 1 }
                 : sort === 'highest'
                 ? { price: -1 }
-                : sort === 'toprated'
-                ? { rating: -1 }
                 : { _id: -1 }
 
         const categories = await ProductModel.find().distinct('category')
@@ -90,7 +78,6 @@ const getByQuery = cache(
                 ...queryFilter,
                 ...categoryFilter,
                 ...priceFilter,
-                // ...ratingFilter,
             },
             '-reviews'
         )
@@ -103,7 +90,6 @@ const getByQuery = cache(
             ...queryFilter,
             ...categoryFilter,
             ...priceFilter,
-            // ...ratingFilter,
         })
 
         return {
