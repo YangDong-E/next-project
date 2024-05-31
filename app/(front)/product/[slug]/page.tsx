@@ -32,11 +32,16 @@ export default async function ProductDetails({
     }
     return (
         <>
-            <div className="my-2">
+            <div
+                className="my-2 btn"
+                style={{
+                    border: 'solid 1px var(--fallback-bc,oklch(var(--bc)/0.2))',
+                }}
+            >
                 <Link href="/"> 메인으로</Link>
             </div>
             <div className="grid md:grid-cols-4 md:gab-3">
-                <div className="md:col-span-2">
+                <div className="md:col-span-2 mr-5">
                     <Image
                         src={product.image}
                         alt={product.name}
@@ -50,7 +55,7 @@ export default async function ProductDetails({
                     />
                 </div>
                 <div>
-                    <ul className="space-y-4">
+                    <ul className="space-y-4 mr-5">
                         <li>
                             <h1 className="text-xl">{product.name}</h1>
                         </li>
@@ -59,7 +64,8 @@ export default async function ProductDetails({
                             <div className="divider"></div>
                         </li>
                         <li>
-                            상세 내용: <p>{product.description}</p>
+                            상세 내용:{' '}
+                            <p className="mt-2">{product.description}</p>
                         </li>
                     </ul>
                 </div>
