@@ -3,7 +3,7 @@ import productServices from '@/lib/services/productService'
 import Link from 'next/link'
 import React from 'react'
 
-const sortOrders = ['최신순', '가격이 낮은순', '가격이 높은순']
+const sortOrders = ['최신순', '낮은가격순', '높은가격순']
 const prices = [
     {
         name: '1원 ~ 50원',
@@ -48,7 +48,7 @@ export default async function SearchPage({
         q = 'all',
         category = 'all',
         price = 'all',
-        sort = 'newest',
+        sort = '최신순',
         page = '1',
     },
 }: {
@@ -165,22 +165,25 @@ export default async function SearchPage({
                             </Link>
                         ) : null}
                     </div>
-                    <div>
-                        <span
-                            style={{
-                                borderRight:
-                                    'solid 1px var(--fallback-bc,oklch(var(--bc)/0.5)',
-                                paddingRight: '10px',
-                            }}
+                    <div className="grid grid-cols-3 justify-items-end ">
+                        {/* <span
+                            // style={{
+                            //     borderRight:
+                            //         'solid 1px var(--fallback-bc,oklch(var(--bc)/0.5)',
+                            //     paddingRight: '20px',
+                            //     fontSize: '20px',
+                            // }}
+                            className="border-r border-solid border-zinc-700 pr-3"
                         >
                             분류
-                        </span>
+                        </span> */}
                         {sortOrders.map((s) => (
                             <Link
                                 key={s}
                                 className={`mx-2 link link-hover ${
                                     sort == s ? 'link-primary' : ''
-                                } `}
+                                } 
+                                `}
                                 href={getFilterUrl({ s })}
                             >
                                 {s}

@@ -27,7 +27,7 @@ const getBySlug = cache(async (slug: string) => {
     return product as Product
 })
 
-const PAGE_SIZE = 3
+const PAGE_SIZE = 6
 const getByQuery = cache(
     async ({
         q,
@@ -66,9 +66,9 @@ const getByQuery = cache(
                   }
                 : {}
         const order: Record<string, 1 | -1> =
-            sort === 'lowest'
+            sort === '낮은가격순'
                 ? { price: 1 }
-                : sort === 'highest'
+                : sort === '높은가격순'
                 ? { price: -1 }
                 : { _id: -1 }
 
