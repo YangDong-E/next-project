@@ -1,6 +1,6 @@
 import AddToCart from '@/components/products/AddToCart'
 import { convertDocToObj } from '@/lib/utils'
-import data from '@/lib/data'
+// import data from '@/lib/data'
 import productService from '@/lib/services/productService'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -79,9 +79,19 @@ export default async function ProductDetails({
                             <div className="mb-2 flex justify-between">
                                 <div>재고상태</div>
                                 <div>
-                                    {product.countInStock > 0
-                                        ? '재고 있음'
-                                        : '재고 없음'}
+                                    {product.countInStock > 0 ? (
+                                        <>
+                                            <div className="text-green-700">
+                                                재고 있음
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <div className="text-red-700">
+                                                재고 없음
+                                            </div>
+                                        </>
+                                    )}
                                 </div>
                             </div>
                             {product.countInStock !== 0 && (

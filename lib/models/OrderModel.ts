@@ -19,6 +19,11 @@ const orderSchema = new mongoose.Schema(
                 qty: { type: Number, required: true },
                 image: { type: String, required: true },
                 price: { type: Number, required: true },
+                countInStock: {
+                    type: Number,
+                    required: true,
+                },
+                description: { type: String, required: true },
             },
         ],
         shippingAddress: {
@@ -80,6 +85,7 @@ export type OrderItem = {
     color: string
     size: string
     countInStock: number
+    description: string
 }
 
 // 한국 주소지 시스템에 맞게 변경 예정

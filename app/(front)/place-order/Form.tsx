@@ -181,7 +181,9 @@ const Form = () => {
 
                                 <li>
                                     <button
-                                        onClick={() => placeOrder()}
+                                        onClick={() => {
+                                            placeOrder()
+                                        }}
                                         disabled={isPlacing}
                                         className="btn btn-primary w-full"
                                     >

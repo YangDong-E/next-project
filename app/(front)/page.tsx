@@ -61,8 +61,8 @@ export default async function Home() {
                     </div>
                 ))}
             </div>
-            <h2 className="text-2xl py-2">제품 목록</h2>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4">
+            {/* <h2 className="text-2xl py-2">제품 목록</h2> */}
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4 mt-20">
                 {/* data(파일). products(불러올데이터).map(함수)로 뿌려주기 */}
                 {latestProducts.map((product) => (
                     <ProductItem

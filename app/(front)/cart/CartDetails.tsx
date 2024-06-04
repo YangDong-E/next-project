@@ -106,9 +106,10 @@ export default function CartDetails() {
                                         </li>
                                         <li>
                                             <button
-                                                onClick={() =>
-                                                    // router.push('/shipping')
-                                                    console.log(items)
+                                                onClick={
+                                                    () =>
+                                                        router.push('/shipping')
+                                                    // console.log(items)
                                                 }
                                                 className="btn btn-primary w-full"
                                             >
