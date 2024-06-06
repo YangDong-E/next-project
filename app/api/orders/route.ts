@@ -36,6 +36,13 @@ export const POST = auth(async (req: any) => {
         // CountInStock 찾기? <- POST로 보낼때 ProductModel의 CountInStock 와 OrderModel의 qty를 빼서 ProductModel의 CountInStock를 업데이트
         // 이 부분에서 ProductModel.CountInStock 와 OrderModel.qty 불러와야함
 
+        const dbProductCount = await ProductModel.find(
+            {
+                _id: { $in: payload.items.map((x: { _id: string }) => x._id) },
+            },
+            'countInStock'
+        )
+
         const dbProductPrices = await ProductModel.find(
             {
                 _id: { $in: payload.items.map((x: { _id: string }) => x._id) },
@@ -46,6 +53,9 @@ export const POST = auth(async (req: any) => {
             ...x,
             product: x._id,
             price: dbProductPrices.find((x) => x._id === x._id).price,
+            countInStock:
+                dbProductCount.find((x) => x._id === x._id).countInStock -
+                payload.items.qty,
             _id: undefined,
         }))
         const { itemsPrice, taxPrice, shippingPrice, totalPrice } =
