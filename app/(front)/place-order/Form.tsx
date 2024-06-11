@@ -24,6 +24,10 @@ const Form = () => {
     const { trigger: placeOrder, isMutating: isPlacing } = useSWRMutation(
         `/api/orders/mine`,
         async (url) => {
+            const exist = items.map((x) =>
+                x.qty >= 0 ? { ...x, countInStock: x.countInStock - x.qty } : x
+            )
+
             const res = await fetch('/api/orders', {
                 method: 'POST',
                 headers: {
@@ -32,7 +36,7 @@ const Form = () => {
                 body: JSON.stringify({
                     paymentMethod,
                     shippingAddress,
-                    items,
+                    items: exist,
                     itemsPrice,
                     taxPrice,
                     shippingPrice,

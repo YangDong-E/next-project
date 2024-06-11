@@ -21,6 +21,7 @@ const orderSchema = new mongoose.Schema(
                 price: { type: Number, required: true },
                 countInStock: {
                     type: Number,
+                    ref: 'Product',
                     required: true,
                 },
                 description: { type: String, required: true },

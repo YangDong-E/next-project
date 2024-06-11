@@ -32,6 +32,7 @@ export const POST = auth(async (req: any) => {
     try {
         const payload = await req.json()
         await dbConnect()
+
         const dbProductPrices = await ProductModel.find(
             {
                 _id: { $in: payload.items.map((x: { _id: string }) => x._id) },
