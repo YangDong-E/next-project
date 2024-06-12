@@ -33,6 +33,13 @@ export const POST = auth(async (req: any) => {
         const payload = await req.json()
         await dbConnect()
 
+        const dbProductCount = await ProductModel.find(
+            {
+                _id: { $in: payload.items.map((x: { _id: string }) => x._id) },
+            },
+            'countInStock'
+        )
+
         const dbProductPrices = await ProductModel.find(
             {
                 _id: { $in: payload.items.map((x: { _id: string }) => x._id) },
@@ -43,12 +50,20 @@ export const POST = auth(async (req: any) => {
             ...x,
             product: x._id,
             price: dbProductPrices.find((x) => x._id === x._id).price,
+            countInStock: dbProductCount.find((x) => x._id === x._id)
+                .countInStock,
             _id: undefined,
         }))
+
         const { itemsPrice, taxPrice, shippingPrice, totalPrice } =
             calcPrices(dbOrderItems)
+
+        const exist = dbOrderItems.map((x: any) =>
+            x.qty >= 0 ? { ...x, countInStock: x.countInStock - x.qty } : x
+        )
+
         const newOrder = new OrderModel({
-            items: dbOrderItems,
+            items: exist,
             itemsPrice,
             taxPrice,
             shippingPrice,
@@ -59,6 +74,7 @@ export const POST = auth(async (req: any) => {
         })
 
         const createdOrder = await newOrder.save()
+
         return Response.json(
             { message: 'Order has been created', order: createdOrder },
             {
@@ -74,3 +90,45 @@ export const POST = auth(async (req: any) => {
         )
     }
 })
+
+export const PUT = auth(async (...p: any) => {
+    const [req, { params }] = p
+    if (!req.auth) {
+        return Response.json(
+            { message: 'unauthorized' },
+            {
+                status: 401,
+            }
+        )
+    }
+
+    const { countInStock } = await req.json()
+
+    try {
+        await dbConnect()
+
+        const order = await OrderModel.findById(params.id)
+
+        const product = await ProductModel.findById(params.id)
+        if (product) {
+            product.countInStock = countInStock - order.qty
+
+            const updatedProduct = await product.save()
+            return Response.json(updatedProduct)
+        } else {
+            return Response.json(
+                { message: 'Product not found' },
+                {
+                    status: 404,
+                }
+            )
+        }
+    } catch (err: any) {
+        return Response.json(
+            { message: err.message },
+            {
+                status: 500,
+            }
+        )
+    }
+}) as any

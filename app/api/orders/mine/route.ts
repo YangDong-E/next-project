@@ -1,6 +1,7 @@
 import dbConnect from '@/lib/dbConnect'
 import OrderModel from '@/lib/models/OrderModel'
 import { auth } from '@/lib/auth'
+import ProductModel from '@/lib/models/ProductModel'
 
 export const GET = auth(async (req: any) => {
     if (!req.auth) {
