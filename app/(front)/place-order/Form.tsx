@@ -19,6 +19,7 @@ const Form = () => {
         shippingPrice,
         totalPrice,
         clear,
+        update,
     } = useCartService()
 
     const { trigger: placeOrder, isMutating: isPlacing } = useSWRMutation(
@@ -42,6 +43,7 @@ const Form = () => {
             const data = await res.json()
 
             if (res.ok) {
+                update()
                 clear()
                 toast.success('주문이 완료되었습니다.')
                 return router.push(`/order/${data.order._id}`)
