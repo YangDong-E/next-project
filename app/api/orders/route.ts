@@ -33,13 +33,6 @@ export const POST = auth(async (req: any) => {
         const payload = await req.json()
         await dbConnect()
 
-        const dbProductCount = await ProductModel.find(
-            {
-                _id: { $in: payload.items.map((x: { _id: string }) => x._id) },
-            },
-            'countInStock'
-        )
-
         const dbProductPrices = await ProductModel.find(
             {
                 _id: { $in: payload.items.map((x: { _id: string }) => x._id) },
@@ -50,20 +43,13 @@ export const POST = auth(async (req: any) => {
             ...x,
             product: x._id,
             price: dbProductPrices.find((x) => x._id === x._id).price,
-            countInStock: dbProductCount.find((x) => x._id === x._id)
-                .countInStock,
             _id: undefined,
         }))
 
         const { itemsPrice, taxPrice, shippingPrice, totalPrice } =
             calcPrices(dbOrderItems)
-
-        const exist = dbOrderItems.map((x: any) =>
-            x.qty >= 0 ? { ...x, countInStock: x.countInStock - x.qty } : x
-        )
-
         const newOrder = new OrderModel({
-            items: exist,
+            items: dbOrderItems,
             itemsPrice,
             taxPrice,
             shippingPrice,

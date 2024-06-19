@@ -19,12 +19,15 @@ const Form = () => {
         shippingPrice,
         totalPrice,
         clear,
-        update,
     } = useCartService()
 
     const { trigger: placeOrder, isMutating: isPlacing } = useSWRMutation(
         `/api/orders/mine`,
         async (url) => {
+            const exist = items.map((x) =>
+                x.qty >= 0 ? { ...x, countInStock: x.countInStock - x.qty } : x
+            )
+
             const res = await fetch('/api/orders', {
                 method: 'POST',
                 headers: {
@@ -33,7 +36,7 @@ const Form = () => {
                 body: JSON.stringify({
                     paymentMethod,
                     shippingAddress,
-                    items,
+                    items: exist,
                     itemsPrice,
                     taxPrice,
                     shippingPrice,
@@ -43,7 +46,6 @@ const Form = () => {
             const data = await res.json()
 
             if (res.ok) {
-                update()
                 clear()
                 toast.success('주문이 완료되었습니다.')
                 return router.push(`/order/${data.order._id}`)

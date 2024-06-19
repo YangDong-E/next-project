@@ -3,7 +3,6 @@ import { round2 } from '../utils'
 import { OrderItem, ShippingAddress } from '../models/OrderModel'
 import { persist } from 'zustand/middleware'
 import { Product } from '../models/ProductModel'
-import { ProductItem } from '@/components/products/ProductItem'
 
 type Cart = {
     items: OrderItem[]
@@ -125,18 +124,6 @@ export default function useCartService() {
             cartStore.setState({
                 items: [],
             })
-        },
-        update: () => {
-            const exist = items.find((x) => x.slug === x.slug)
-            if (exist) {
-                exist.qty > 0
-                    ? items.map((x: ProductItem) =>
-                          x.qty >= 0
-                              ? { ...x, countInStock: x.countInStock - x.qty }
-                              : x
-                      )
-                    : exist
-            }
         },
         init: () => cartStore.setState(initialState),
     }
